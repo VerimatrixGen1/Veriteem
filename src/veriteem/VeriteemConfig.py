@@ -11,7 +11,8 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-c","--config", help="configure parameters",  action="store_true")
     parser.add_argument("-i","--init",   help="initialize blockchain", action="store_true")
-    parser.add_argument("-r","--run",    help="start the chain miner", action="store_true")
+    parser.add_argument("-r","--run",    help="start the veriteem service ", action="store_true")
+    parser.add_argument("-m","--miner",  help="start the veriteem mining service ", action="store_true")
     parser.add_argument("-s","--stop",   help="stop the chain miner",  action="store_true")
     parser.add_argument("-a","--access", help="add account to access control", action="store_true")
     parser.add_argument("-t","--total",  help="configure, init, and start the chain miner", action="store_true")
@@ -54,8 +55,17 @@ def main(argv):
           return
        myInit.CreateBlockChain()
 
-    # if the user wants to run all items or start the miner
+    # if the user wants to run all items or start the veriteem service
     if (args.run == True) or (args.total == True) :
+       try:
+          myVeriteem = vmx.StartVeriteem(path)
+       except:
+          print(traceback.format_exc())
+          return
+       myVeriteem.Start()
+
+    # if the user wants to start the miner
+    if (args.miner == True)  :
        try:
           myMiner = vmx.StartMiner(path)
        except:
