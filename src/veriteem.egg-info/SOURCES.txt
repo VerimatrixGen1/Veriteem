@@ -7,6 +7,7 @@ src/veriteem/Configure.py
 src/veriteem/InitGeth.py
 src/veriteem/README.md
 src/veriteem/StartMiner.py
+src/veriteem/StartVeriteem.py
 src/veriteem/Veriteem.py
 src/veriteem/VeriteemConfig.py
 src/veriteem/VeriteemInstall.py

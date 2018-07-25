@@ -17,6 +17,9 @@ sudo apt-get install -q golang-1.9-go
 #  Download the ethereum go package
 #
 git clone https://github.com/ethereum/go-ethereum.git
+cd go-ethereum
+git checkout release/1.8
+cd ..
 cp ../assets/evm.go go-ethereum/core/vm/evm.go
 cp ../assets/errors.go go-ethereum/core/vm/errors.go
 version=`ls ../.. | grep veriteem- | cut -d "-" -f2 | cut -d '.' -f1-3`
