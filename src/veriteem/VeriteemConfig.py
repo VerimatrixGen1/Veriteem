@@ -73,7 +73,7 @@ def main(argv):
           return
        myMiner.Start()
 
-    if (args.access == True) or (args.total == True) :
+    if (args.access == True) :
        try:
           myAccess = vmx.AccessControl(path)
        except:

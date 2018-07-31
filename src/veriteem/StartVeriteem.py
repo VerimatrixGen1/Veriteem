@@ -4,13 +4,17 @@ import os
 import shutil
 import time
 
+from .Configure import Configure 
 from .Config import Config 
 
 class StartVeriteem():
 
     myConfig = []
+    myPath = None
 
     def __init__(self, path):
+
+        StartVeriteem.myPath = path
 
         try:
            StartVeriteem.myConfig = Config(path)
@@ -18,6 +22,9 @@ class StartVeriteem():
            print ("Site configuration not specified")
            print(traceback.format_exc())
            return;
+        #
+        #  Load the configuration 
+        #
         try:
            StartVeriteem.myConfig.LoadConfig()
         except:
@@ -25,6 +32,16 @@ class StartVeriteem():
 
     @classmethod
     def Start(self):
+        #
+        # If we do not have an Account, have the user create one
+        #
+        if StartVeriteem.myConfig.ACCOUNT is None:
+           myConfigure = Configure(StartVeriteem.myPath, False)
+           myConfigure.getAccount(StartVeriteem.myConfig.KEYSTORE)
+           StartVeriteem.myConfig.ACCOUNT = myConfigure.Account
+           StartVeriteem.myConfig.ACCOUNTPWD = myConfigure.AccountPwd
+           StartVeriteem.myConfig.saveConfig(StartVeriteem.myConfig)
+
         #
         #  We are running our modified geth
         #

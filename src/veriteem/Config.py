@@ -166,3 +166,21 @@ class Config():
         else :
            path = os.path.join(packagePath,subDirectory,fileName)
         return path
+
+    @classmethod
+    def saveConfig(self, Config):
+        filePath = os.path.join(self.CONFIGPATH,"Config.json")
+        ConfigFile = open(filePath, 'w')
+        ConfigFile.writelines("{")
+        ConfigFile.writelines('"GETHDATA":"' + Config.GETHDATA + '",\n')
+        ConfigFile.writelines('"BOOTNODE":"' + Config.BOOTNODE + '",\n')
+        ConfigFile.writelines('"KEYSTORE":"' + Config.KEYSTORE + '",\n')
+        ConfigFile.writelines('"NETWORK":"'  + Config.NETWORK  +  '",\n')
+
+        # Account Name
+        ConfigFile.writelines('"ACCOUNT":"' + Config.ACCOUNT + '",\n')
+        ConfigFile.writelines('"ACCOUNTPWD":"' + Config.ACCOUNTPWD + '"\n')
+
+        ConfigFile.writelines("}\n")
+        ConfigFile.close()
+        return

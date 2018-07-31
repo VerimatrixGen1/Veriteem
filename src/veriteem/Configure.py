@@ -120,23 +120,18 @@ class Configure():
         # We need to prep the config with the needed assets 
         #
         Configure.copyAssets()
-              
-        filePath = os.path.join(Configure.myConfig.CONFIGPATH,"Config.json")
-        ConfigFile = open(filePath, 'w')
-        ConfigFile.writelines("{")
-        ConfigFile.writelines('"GETHDATA":"' + GethData.replace("\\", "\\\\") + '",\n')
-        ConfigFile.writelines('"BOOTNODE":"' + BootNode + '",\n')
-        ConfigFile.writelines('"KEYSTORE":"' + KeyStore.replace("\\", "\\\\") + '",\n')
-        ConfigFile.writelines('"NETWORK":"' + str(chainId) + '",\n')
+       
 
-        # Account Name
-        ConfigFile.writelines('"ACCOUNT":"' + Configure.Account + '",\n')
-    
-        objPswd = Configure.encode("VmxSanDiego", Configure.AccountPwd)
-        ConfigFile.writelines('"ACCOUNTPWD":"' + objPswd + '"\n')
+        Configure.myConfig.GETHDATA = GethData.replace("\\", "\\\\") 
+        Configure.myConfig.BOOTNODE = BootNode 
+        Configure.myConfig.KEYSTORE = KeyStore.replace("\\", "\\\\") 
+        print("KEYSTORE = " + KeyStore)
+        print("Config.KEYSTORE = " + Configure.myConfig.KEYSTORE)
+        Configure.myConfig.NETWORK  = str(chainId) 
+        Configure.myConfig.ACCOUNT  = Configure.Account
+        Configure.myConfig.ACCOUNTPWD  = Configure.AccountPwd
 
-        ConfigFile.writelines("}\n")
-        ConfigFile.close()
+        Configure.myConfig.saveConfig(Configure.myConfig)
 
         if Configure.noSavePath:
            return
