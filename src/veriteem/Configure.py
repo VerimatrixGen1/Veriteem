@@ -4,7 +4,6 @@ import shutil
 import getpass
 import csv
 import json
-import base64
 
 from .Config import Config
 
@@ -182,16 +181,6 @@ class Configure():
                print("Path=" + path)
                print("ConfigPath=" + configPath)
                shutil.copy(path, configPath)
-
-    @classmethod
-    def encode(self, key, clear):
-        enc = []
-        for i in range(len(clear)):
-            key_c = key[i % len(key)]
-            enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
-            enc.append(enc_c)
-        return base64.urlsafe_b64encode("".join(enc).encode()).decode()
-   
 
     @classmethod
     def getSystem(self):

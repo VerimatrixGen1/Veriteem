@@ -168,6 +168,15 @@ class Config():
         return path
 
     @classmethod
+    def encode(self, key, clear):
+        enc = []
+        for i in range(len(clear)):
+            key_c = key[i % len(key)]
+            enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
+            enc.append(enc_c)
+        return base64.urlsafe_b64encode("".join(enc).encode()).decode()
+
+    @classmethod
     def saveConfig(self, Config):
         filePath = os.path.join(self.CONFIGPATH,"Config.json")
         ConfigFile = open(filePath, 'w')
@@ -179,7 +188,9 @@ class Config():
 
         # Account Name
         ConfigFile.writelines('"ACCOUNT":"' + Config.ACCOUNT + '",\n')
-        ConfigFile.writelines('"ACCOUNTPWD":"' + Config.ACCOUNTPWD + '"\n')
+
+        objPswd = self.encode("VmxSanDiego", Config.ACCOUNTPWD)
+        ConfigFile.writelines('"ACCOUNTPWD":"' + objPswd + '"\n')
 
         ConfigFile.writelines("}\n")
         ConfigFile.close()
