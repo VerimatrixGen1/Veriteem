@@ -29,6 +29,13 @@ def main(argv):
     myInstall = vmx.VeriteemInstall()
     myInstall.CheckInstallation()
 
+    #
+    # If we do not a complete config, turn on the config option
+    #
+    myConfig = vmx.Config(path )
+    if myConfig.IsComplete() == False:
+       args.config = True
+
     # if no arguments were provided, default to --total
     if len(argv) == 1 :
        args.total = True

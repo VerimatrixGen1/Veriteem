@@ -3,6 +3,7 @@ import sys
 import os
 import json
 import base64
+import shutil
 
 class Config():
 
@@ -11,9 +12,23 @@ class Config():
 
     def __init__(self, path):
         Config.INSTALLPATH = self.find_module_path("veriteem")
-        Config.CONFIGPATH  = self.getConfigPath(path)
+        self.getConfigPath(path)
         
-        
+    @classmethod
+    def IsComplete(self):
+        self.LoadConfig()
+        if Config.GETHDATA is None:
+           return False
+        if Config.CONFIGPATH is None:
+           return False
+        if Config.KEYSTORE is None:
+           return False
+        if Config.NETWORK is None:
+           return False
+        if Config.ACCOUNT is None:
+           return False
+        return True
+ 
     @classmethod
     def LoadConfig(self):
         if Config.CONFIGPATH is None:
@@ -97,9 +112,12 @@ class Config():
            print("HOME environment variable not set")
            return None
 
-        homeDir = homeDir + "/.veriteem"
         if os.path.isdir(homeDir) == False:
            print(homeDir + " does not exist")
+           return None
+
+        homeDir = os.path.join(homeDir,".veriteem")
+        if os.path.isdir(homeDir) == False:
            return None
 
         try:
@@ -138,8 +156,25 @@ class Config():
            if response.upper() == "N" : 
               raise Exception("Need valid directory to store app data in") 
            os.mkdir(path)
-           
-        return path
+    
+        #
+        #  Create the cookie that says where this path is
+        #
+        homeDir = os.environ["HOME"]
+        cookieDir = os.path.join(homeDir, ".veriteem")
+        if os.path.isdir(cookieDir) == False :
+           os.mkdir(cookieDir)
+        cookieFile = open(os.path.join(cookieDir, "config"), "w")  
+        cookieFile.writelines(path)
+        cookieFile.close()
+
+        self.CONFIGPATH = path
+        #
+        #  Make sure there is a Config.json and genesis file
+        #
+        self.copyAssets()
+
+        return 
 
     @classmethod
     def getChainExe(self):
@@ -195,3 +230,23 @@ class Config():
         ConfigFile.writelines("}\n")
         ConfigFile.close()
         return
+
+    @classmethod
+    def copyAssets(self):
+        configPath = self.CONFIGPATH
+        if not os.path.isdir(configPath):
+           try:
+              os.mkdir(configPath)
+           except:
+              errMsg = "Unable to create " + configPath 
+              raise Exception(errMsg)
+
+        fileList = ["genesis.json","Config.json"]
+
+        for asset in fileList:
+            path = os.path.join(configPath,asset)
+            if path == None:
+               continue
+            if not os.path.isfile(path):
+               path = self.getFilePath(asset)
+               shutil.copy(path, configPath)

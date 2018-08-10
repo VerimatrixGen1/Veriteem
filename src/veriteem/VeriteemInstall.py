@@ -35,6 +35,8 @@ class VeriteemInstall():
           #
           # We have a veriteem executable, check its version
           #
+          cwd = os.getcwd()
+
           os.chdir(VeriteemInstall.installPath)
   
           fp = open("VERSION", "r")
@@ -49,9 +51,13 @@ class VeriteemInstall():
           sidx   = filename.find('-') + 1
           eidx   = filename.find('.dist')   
           if eidx < 0 :
+             eidx = filename.find('.egg')
+          if eidx < 0 :
              eidx = filename.find('-py')
           pversion = filename[sidx:eidx]
           print("version " + version)
+
+          os.chdir(cwd)
           print("pversion " + pversion)
           if pversion != version :
              print ("Please wait, need to update package")
@@ -136,10 +142,12 @@ class VeriteemInstall():
       def installEthereum(self):
 
           try:
+              cwd = os.getcwd()
               path = os.path.join(VeriteemInstall.installPath, "bin")
               print("installgo is in " + path)
               os.chdir(path)
               os.system("./installgo.sh")
+              os.chdir(cwd)
           except:
               print("Unable to install ethereum")
               return

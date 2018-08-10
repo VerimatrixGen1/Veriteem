@@ -1,6 +1,5 @@
 import sys
 import os
-import shutil
 import getpass
 import csv
 import json
@@ -118,69 +117,16 @@ class Configure():
         # 
         # We need to prep the config with the needed assets 
         #
-        Configure.copyAssets()
-       
 
         Configure.myConfig.GETHDATA = GethData.replace("\\", "\\\\") 
         Configure.myConfig.BOOTNODE = BootNode 
         Configure.myConfig.KEYSTORE = KeyStore.replace("\\", "\\\\") 
-        print("KEYSTORE = " + KeyStore)
-        print("Config.KEYSTORE = " + Configure.myConfig.KEYSTORE)
         Configure.myConfig.NETWORK  = str(chainId) 
         Configure.myConfig.ACCOUNT  = Configure.Account
         Configure.myConfig.ACCOUNTPWD  = Configure.AccountPwd
 
         Configure.myConfig.saveConfig(Configure.myConfig)
 
-        if Configure.noSavePath:
-           return
-        #
-        #  Create the cookie for where this config.json lives
-        #  so we can run tools on the chain without being tied
-        #  to starting in the directory
-        #
-        try:
-           homePath = os.path.join(os.environ["HOME"], ".veriteem")
-        except:
-           return
-
-        if os.path.isdir(homePath) == False:
-           try:
-              os.mkdir(homePath)
-           except Exception as ex:
-              print (ex)              
- 
-
-        try:
-           cookieFile = open(homePath + "/config", "w")
-        except:
-           return
-
-        cookieFile.writelines(Configure.myConfig.CONFIGPATH);
-        cookieFile.close()
-
-    @classmethod
-    def copyAssets(self):
-        configPath = Configure.myConfig.CONFIGPATH
-        if not os.path.isdir(configPath):
-           try:
-              os.mkdir(configPath)
-           except:
-              errMsg = "Unable to create " + configPath 
-              raise Exception(errMsg)
-
-        fileList = ["genesis.json","Config.json"]
-
-        for asset in fileList:
-            path = os.path.join(configPath,asset)
-            if path == None:
-               continue
-            if not os.path.isfile(path):
-               path = Configure.myConfig.getFilePath(asset)
-               print("Asset=" + asset)
-               print("Path=" + path)
-               print("ConfigPath=" + configPath)
-               shutil.copy(path, configPath)
 
     @classmethod
     def getSystem(self):

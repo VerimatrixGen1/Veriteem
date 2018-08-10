@@ -1,7 +1,5 @@
 #!/bin/bash
-source /etc/environment
 PX=`echo $PATH | grep go-1.9`
-echo $PX
 if [ -z $PX ]
 then
    export PATH=$PATH:/usr/lib/go-1.9/bin
@@ -26,7 +24,6 @@ version=`ls ../.. | grep veriteem- | cut -d "-" -f2 | cut -d '.' -f1-3`
 echo $version >../VERSION
 sed -i "/pingPacket = iota + 1/c\        pingPacket = iota + 32 " go-ethereum/p2p/discover/udp.go 
 sed -i "/VersionMeta  =/c\     VersionMeta = \"veriteem-$version\"" go-ethereum/params/version.go 
-chmod 555 bin
 cd go-ethereum
 make all
 cd ..
