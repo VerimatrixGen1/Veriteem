@@ -45,13 +45,18 @@ class StartVeriteem():
         #
         #  We are running our modified geth
         #
+        pwFile = open("pauth.txt", "w")
+        passwd = StartVeriteem.myConfig.ACCOUNTPWD 
+        pwFile.writelines(passwd)
+        pwFile.close()
         chainExe = StartVeriteem.myConfig.getChainExe()
         Cmd = chainExe + ' --rpc --rpcaddr localhost --rpcport 8545 --rpcapi "web3,eth" --rpccorsdomain "http://localhost:8000" '
         Cmd = Cmd + '--datadir ' + StartVeriteem.myConfig.GETHDATA  + ' '
     
         Cmd = Cmd + '--port 60303 --networkid ' + StartVeriteem.myConfig.NETWORK + ' --targetgaslimit 15000000 --gasprice 0 --maxpeers 25 --nat none '
+        Cmd = Cmd + ' --keystore ' + StartVeriteem.myConfig.KEYSTORE + ' --unlock ' + StartVeriteem.myConfig.ACCOUNT + ' --etherbase ' + StartVeriteem.myConfig.ACCOUNT
     
-        Cmd = Cmd + ' --bootnodes ' + StartVeriteem.myConfig.BOOTNODE
+        Cmd = Cmd + ' --password pauth.txt --bootnodes ' + StartVeriteem.myConfig.BOOTNODE
         Cmd = Cmd +  ' >> ' + os.path.join(StartVeriteem.myConfig.GETHDATA, 'logs', 'geth.log') +  ' 2>&1 &'
         
         print (Cmd)
@@ -59,3 +64,4 @@ class StartVeriteem():
     
         print("Waiting for server to start")
         time.sleep(10)
+        os.remove("pauth.txt")
