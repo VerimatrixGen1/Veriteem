@@ -25,7 +25,7 @@ from setuptools.command.install import install
 
 setup(
     name="veriteem",
-    version="0.1.18",
+    version="0.3.03",
     packages=find_packages('src'),
     package_dir={'':'src'},
 

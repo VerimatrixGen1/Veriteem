@@ -415,8 +415,7 @@ func (evm *EVM) create(caller ContractRef, code []byte, gas uint64, value *big.I
            log.Info("*** Create Allowed ***")
         } else {
            log.Info("*** Create Blocked ***")
-           //code,_ = hex.DecodeString("00")
-           blockedContract = 0;
+           code,_ = hex.DecodeString("00")
         }
         log.Info(fmt.Sprintf("Code: %x",code))
 
